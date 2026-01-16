@@ -1,28 +1,21 @@
 export function isValidEmail(email: string): boolean {
-  if (email.includes(" ")) {
-    return false;
-  }
+  if (!email) return false
+  if (email.includes(' ')) return false
 
-  const atIndex = email.indexOf("@");
-  if (atIndex === -1) {
-    return false;
-  }
+  const parts = email.split('@')
+  if (parts.length !== 2) return false
 
-  const beforeAt = email.substring(0, atIndex);
-  const afterAt = email.substring(atIndex + 1);
+  const [local, domain] = parts
+  if (!local || !domain) return false
 
-  if (beforeAt.length === 0 || afterAt.length === 0) {
-    return false;
-  }
+  const localRegex = /^[A-Za-z0-9._+-]+$/
+  if (!localRegex.test(local)) return false
+  if (local.startsWith('.') || local.endsWith('.')) return false
+  if (local.includes('..')) return false
 
-  const dotIndex = afterAt.indexOf(".");
-  if (dotIndex === -1) {
-    return false;
-  }
+  if (!domain.includes('.')) return false
+  if (domain.startsWith('.') || domain.endsWith('.')) return false
+  if (domain.includes('..')) return false
 
-  if (dotIndex === afterAt.length - 1) {
-    return false;
-  }
-
-  return true;
+  return true
 }
